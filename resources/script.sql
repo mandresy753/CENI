@@ -1,0 +1,1 @@
+select count(*) total_votes from vote

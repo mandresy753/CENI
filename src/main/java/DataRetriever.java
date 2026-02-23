@@ -2,6 +2,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataRetriever {
 
@@ -21,5 +23,15 @@ public class DataRetriever {
         }
 
         return count;
+    }
+    public List<VoteTypeCount> countVotesByType(){
+        List<VoteTypeCount>  voteTypeCounts = new ArrayList<>();
+        String sql = """
+                """;
+        return voteTypeCounts;
+    }
+
+    public List<CandidateVoteCount> countValidVotesByCandidate(){
+        List<CandidateVoteCount>
     }
 }

@@ -27,11 +27,26 @@ public class DataRetriever {
     public List<VoteTypeCount> countVotesByType(){
         List<VoteTypeCount>  voteTypeCounts = new ArrayList<>();
         String sql = """
+                select vote_type, count(*) votes from vote
+                group by vote_type;
                 """;
+        try(Connection conn = new DBConnection().getConnection();
+        Statement stmt = conn.createStatement()){
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                VoteTypeCount  voteTypeCount = new VoteTypeCount();
+                voteTypeCount.setCount(rs.getInt("votes"));
+                String type = rs.getString("vote_type");
+                voteTypeCount.setVoteType( VoteTypeEnum.valueOf(type));
+                voteTypeCounts.add(voteTypeCount);
+            }
+        }catch (SQLException e){
+            throw new RuntimeException("une erreur s'est produit "+e);
+        }
         return voteTypeCounts;
     }
 
-    public List<CandidateVoteCount> countValidVotesByCandidate(){
+    /*public List<CandidateVoteCount> countValidVotesByCandidate(){
         List<CandidateVoteCount>
-    }
+    }*/
 }

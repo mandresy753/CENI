@@ -19,7 +19,7 @@ from vote v;
 select count(*) ,
        count(case when v.voter_id is null then 0 end) from voter
 join vote v
-on v.voter_id  = voter.id
+on v.voter_id  = voter.id;
 
 
 SELECT

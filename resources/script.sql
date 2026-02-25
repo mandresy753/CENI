@@ -16,10 +16,9 @@ select count(case when v.vote_type = 'VALID' then 1 end) valid_count,
        count(case when v.vote_type = 'NULL' then 1 end) null_count
 from vote v;
 
-select count(*) ,
-       count(case when v.voter_id is null then 0 end) from voter
-join vote v
-on v.voter_id  = voter.id;
+select round(count(*) * 100.0/(select count(distinct voter_id) from vote), 2)
+taux_participations from voter;
+
 
 
 SELECT

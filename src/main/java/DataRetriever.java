@@ -93,4 +93,21 @@ public class DataRetriever {
         }
         return voteSummary;
     }
+    public  double computeTurnoutRate() {
+        String sql = """
+                select round(count(*) * 100.0/(select count(distinct voter_id) from vote), 2)
+                taux_participations from voter;
+                """;
+        double rate = 0.0;
+        try(Connection conn = new DBConnection().getConnection();
+        Statement stmt = conn.createStatement()){
+            ResultSet rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                rate = rs.getDouble("taux_participations");
+            }
+        }catch(SQLException e){
+            throw new RuntimeException("une erreur s'est produit "+e);
+        }
+        return rate;
+    }
 }

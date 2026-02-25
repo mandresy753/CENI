@@ -5,7 +5,8 @@ public class Main {
         //System.out.println(retriever.countVotesByType());
         //System.out.println(retriever.countValidVotesByCandidate());
         //System.out.println(retriever.computeVoteSummary());
-        System.out.println(retriever.computeTurnoutRate() + "%");
+        //System.out.println(retriever.computeTurnoutRate() + "%");
+        System.out.println(retriever.findWinner());
     }
 
 }

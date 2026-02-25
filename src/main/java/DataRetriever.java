@@ -71,6 +71,7 @@ public class DataRetriever {
         }
         return CandidateVoteCounts;
     }
+
     public VoteSummary computeVoteSummary() {
         VoteSummary voteSummary = new VoteSummary();
         String sql = """
@@ -93,6 +94,7 @@ public class DataRetriever {
         }
         return voteSummary;
     }
+
     public  double computeTurnoutRate() {
         String sql = """
                 select round(count(*) * 100.0/(select count(distinct voter_id) from vote), 2)
@@ -109,5 +111,32 @@ public class DataRetriever {
             throw new RuntimeException("une erreur s'est produit "+e);
         }
         return rate;
+    }
+
+    public ElectionResult findWinner(){
+        ElectionResult electionResult = new ElectionResult();
+        String sql = """
+                SELECT
+                    c.name candidate_name,
+                    COUNT(CASE WHEN v.vote_type = 'VALID' THEN 1 END) AS valid_vote_count
+                FROM candidate c
+                         JOIN vote v
+                              ON v.candidate_id = c.id
+                GROUP BY candidate_name
+                order by valid_vote_count desc
+                limit 1
+                """;
+        try(Connection conn = new DBConnection().getConnection();
+        Statement stmt = conn.createStatement()){
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()){
+                electionResult. setCandidateName(rs.getString("candidate_name"));
+                electionResult. setValidVoteCount(rs.getInt("valid_vote_count"));
+            }
+
+        }catch(SQLException e){
+            throw new RuntimeException("Une erreur s'est produite "+e);
+        }
+        return electionResult;
     }
 }
